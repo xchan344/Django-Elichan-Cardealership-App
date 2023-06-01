@@ -9,3 +9,10 @@ class Employee(models.Model):
 
     def __str__(self):
         return f'{self.fname} {self.lname}'
+
+class Car(models.Model):
+    car_model = models.CharField(max_length=100)
+    manufacturer = models.CharField(max_length=100)
+
+    def __str__(self):
+        return f"{self.car_model} ({self.manufacturer})"

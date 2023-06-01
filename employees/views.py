@@ -4,7 +4,10 @@ from .models import Employee
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponseRedirect
 from django.urls import reverse
+from .models import Car
+from .forms import CarModelForm
 
+#employees page
 def employees(request):
     employees = Employee.objects.all()
     return render(request, 'employees/employees.html', {'employees': employees})
@@ -43,3 +46,37 @@ def cars(request):
 
 def logout(request):
     return render(request, 'logout.html')
+
+#cars page
+def cars(request):
+    cars = Car.objects.all()
+    return render(request, 'cars.html', {'cars': cars})
+
+def add_car_model(request):
+    if request.method == 'POST':
+        form = CarModelForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('cars')
+    else:
+        form = CarModelForm()
+    
+    return render(request, 'add_car_model.html', {'form': form})
+
+def edit_car_model(request, pk):
+    car = get_object_or_404(Car, pk=pk)
+    
+    if request.method == 'POST':
+        form = CarModelForm(request.POST, instance=car)
+        if form.is_valid():
+            form.save()
+            return redirect('cars')
+    else:
+        form = CarModelForm(instance=car)
+    
+    return render(request, 'edit_car_model.html', {'form': form})
+
+def delete_car_model(request, pk):
+    car = get_object_or_404(Car, pk=pk)
+    car.delete()
+    return redirect('cars')
