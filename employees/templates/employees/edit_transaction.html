@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Elichan Car Dealership App</title>
+  <link rel="icon" href="img/logo.png" type="image/png">
+  {% extends 'employees/sidebar.html' %}
+  {% block content %}
+  {% load static %}
+  <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.min.css' %}">
+  <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+  <link rel="stylesheet" type="text/css" href="{% static 'css/tables-buttons.css' %}">
+</head>
+<body>
+    <div class="container">
+        <div class="card strpied-tabled-with-hover" style="margin: 10px">
+          <div class="d-flex justify-content-between align-items-center">
+            <div class="d-flex align-items-center">
+              <img src="{% static 'img/transaction-logo.png' %}" height="50px" width="50px" style="margin-right: 10px; margin-left: 400px; margin-top: 15px;">
+              <h1>Edit Transaction</h1>
+            </div>
+            <div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <form method="post">
+        {% csrf_token %}
+        <table class="table">
+          <tbody>
+            <tr>
+              <td>Customer First Name:</td>
+              <td><input type="text" id="id_fname" name="fname" value="{{ form.instance.fname }}" required></td>
+            </tr>
+            <tr>
+              <td>Customer Last Name:</td>
+              <td><input type="text" id="id_lname" name="lname" value="{{ form.instance.lname }}" required></td>
+            </tr>
+            <tr>
+                <td>Car Model:</td>
+                <td>
+                  <select id="id_car" name="car_model" required>
+                    <option value="">--Car Model--</option>
+                    {% for car in cars %}
+                    <option value="{{ car.id }}" {% if car.id == form.instance.car_model.id %}selected{% endif %}>{{ car.car_model }}</option>
+                    {% endfor %}
+                  </select>
+                </td>
+              </tr>
+            <tr>
+              <td>Transaction Type:</td>
+              <td>
+                <select id="id_t_type" name="t_type" required>
+                  <option value="">--Transaction Type--</option>
+                  <option value="Bought" {% if form.instance.t_type == 'Bought' %}selected{% endif %}>Bought</option>
+                  <option value="Repair" {% if form.instance.t_type == 'Repair' %}selected{% endif %}>Repair</option>
+                  <option value="Consult" {% if form.instance.t_type == 'Consult' %}selected{% endif %}>Consult</option>
+                </select>
+              </td>
+            </tr>
+            <tr>
+              <td>Price:</td>
+              <td><input type="number" id="id_price" name="price" value="{{ form.instance.price }}" required></td>
+            </tr>
+            <tr>
+              <td>Transaction Status:</td>
+              <td>
+                <select id="id_t_status" name="t_status" required>
+                  <option value="">--Transaction Status--</option>
+                  <option value="Fully paid" {% if form.instance.t_status == 'Fully paid' %}selected{% endif %}>Fully paid</option>
+                  <option value="Partially paid" {% if form.instance.t_status == 'Partially paid' %}selected{% endif %}>Partially paid</option>
+                  <option value="NA" {% if form.instance.t_status == 'NA' %}selected{% endif %}>NA</option>
+                </select>
+              </td>
+            </tr>
+            <tr>
+              <td>Date:</td>
+              <td><input type="date" id="id_date" name="date" value="{{ form.instance.date }}" required></td>
+            </tr>
+          </tbody>
+        </table>
+        <button type="submit" class="btn btn-primary" style="margin-right: 5px">Save</button>
+        <a href="{% url 'transactions' %}" class="btn btn-secondary">Cancel</a>
+      </form>
+    {% endblock %}
+</body>
+</html>

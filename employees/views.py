@@ -6,6 +6,9 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse
 from .models import Car
 from .forms import CarModelForm
+from .forms import TransactionForm
+from .models import Transaction
+from django.shortcuts import render, redirect, get_object_or_404
 
 #employees page
 def employees(request):
@@ -38,6 +41,7 @@ def delete_employee(request, employee_id):
     employee.delete()
     return redirect('employees')
 
+#links
 def transactions(request):
     return render(request, 'transactions.html')
 
@@ -80,3 +84,46 @@ def delete_car_model(request, pk):
     car = get_object_or_404(Car, pk=pk)
     car.delete()
     return redirect('cars')
+
+#transactions page
+def transactions(request):
+    transactions = Transaction.objects.all()
+    return render(request, 'transactions.html', {'transactions': transactions})
+
+def add_transaction(request):
+    if request.method == 'POST':
+        form = TransactionForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('transactions')
+    else:
+        form = TransactionForm()
+    
+    cars = Car.objects.all()
+    
+    return render(request, 'add_transaction.html', {'form': form, 'cars': cars})
+
+def edit_transaction(request, transaction_id):
+    transaction = get_object_or_404(Transaction, pk=transaction_id)
+    if request.method == 'POST':
+        form = TransactionForm(request.POST, instance=transaction)
+        if form.is_valid():
+            form.save()
+            return redirect('transactions')
+    else:
+        form = TransactionForm(instance=transaction)
+    
+    cars = Car.objects.all()  # Replace this with your cars queryset or list
+    
+    context = {
+        'form': form,
+        'cars': cars,
+    }
+    return render(request, 'edit_transaction.html', context)
+
+def delete_transaction(request, transaction_id):
+    transaction = Transaction.objects.get(id=transaction_id)
+    transaction.delete()
+    return redirect('transactions')
+
+
