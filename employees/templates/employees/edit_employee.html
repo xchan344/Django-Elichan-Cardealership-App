@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Car Dealership App</title>
+  <link rel="icon" href="img/logo.png" type="image/png">
+{% extends 'employees/sidebar.html' %}
+{% block content %}
+{% load static %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.min.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'css/tables-buttons.css' %}">
+</head>
+<body>
+<div class="container">
+  <div class="card strpied-tabled-with-hover" style="margin: 10px">
+    <div class="d-flex justify-content-between align-items-center">
+      <div class="d-flex align-items-center">
+        <img src="{% static 'img/team-logo.png' %}" height="50px" width="50px" style="margin-right: 10px; margin-left: 400px; margin-top: 15px;">
+        <h1>Employees</h1>
+      </div>
+      <a href="{% url 'add_employee' %}" class="btn btn-primary" style="margin-right: 5px">Add Employee</a>
+    </div>
+  </div>
+  
+  <form method="post" action="{% url 'edit_employee' employee_id=employee_id %}">
+    {% csrf_token %}
+    <table class="table">
+      <tbody>
+        <tr>
+          <th>First Name:</th>
+          <td><input type="text" name="fname" value="{{ employee.fname }}" required></td>
+        </tr>
+        <tr>
+          <th>Last Name:</th>
+          <td><input type="text" name="lname" value="{{ employee.lname }}" required></td>
+        </tr>
+        <tr>
+          <th>Birthdate:</th>
+          <td><input type="date" name="birthdate" value="{{ employee.birthdate|date:'Y-m-d' }}" required></td>
+        </tr>
+        <tr>
+          <th>Position:</th>
+          <td><input type="text" name="position" value="{{ employee.position }}" required></td>
+        </tr>
+        <tr>
+          <th>Contact:</th>
+          <td><input type="text" name="contact" value="{{ employee.contact }}" required></td>
+        </tr>
+      </tbody>
+    </table>
+    <button type="submit" class="btn btn-primary">Save</button>
+    <a href="{% url 'employees' %}" class="btn btn-secondary">Cancel</a>
+  </form>
+</div>
+
+<script src="{% static 'js/bootstrap.min.js' %}"></script>
+{% endblock %}
+</body>
+</html>

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Car Dealership App</title>
+  <link rel="icon" href="img/logo.png" type="image/png">
+{% extends 'employees/sidebar.html' %}
+{% block content %}
+{% load static %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.min.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'css/tables-buttons.css' %}">
+</head>
+<body>
+<div class="container">
+  <div class="card strpied-tabled-with-hover" style="margin: 10px">
+    <div class="d-flex justify-content-between align-items-center">
+      <div class="d-flex align-items-center">
+        <img src="{% static 'img/team-logo.png' %}" height="50px" width="50px" style="margin-right: 10px; margin-left: 400px; margin-top: 15px;">
+        <h1>Employees</h1>
+      </div>
+      <a href="{% url 'add_employee' %}" class="btn btn-primary" style="margin-right: 5px">Add Employee</a>
+    </div>
+  </div>
+  
+</div>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Employee Name</th>
+        <th>Birth Date</th>
+        <th>Position</th>
+        <th>Contact</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for employee in employees %}
+      <tr>
+        <td>{{ employee.fname }} {{ employee.lname }}</td>
+        <td>{{ employee.birthdate }}</td>
+        <td>{{ employee.position }}</td>
+        <td>{{ employee.contact }}</td>
+        <td>
+          <div class="btn-group" role="group">
+            <a href="{% url 'edit_employee' employee.id %}" class="btn btn-sm btn-primary">Edit</a>
+            <form method="POST" action="{% url 'delete_employee' employee.id %}" class="d-inline">
+              {% csrf_token %}
+              <button style="margin-left: 3px" type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure you want to delete this employee?')">Delete</button>
+            </form>
+          </div>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}
+</body>
+</html>

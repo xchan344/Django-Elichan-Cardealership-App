@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Car Dealership App</title>
+  <link rel="icon" href="img/logo.png" type="image/png">
+  {% load static %}
+  <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.min.css' %}">
+  <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+</head>
+<body>
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-2">
+        <div class="sidebar-wrapper">
+          <div class="sidebar">
+            <div class="logo">
+              <a href="javascript:;" class="simple-text" onclick="location.href='homepage.php'" style="color: white; font-family: 'Arial', sans-serif; text-decoration: none; font-size: 14px;">
+                <img src="{% static 'img/logo.png' %}" class="logo-image" style="width: 80%; height: auto;">
+                Elichan Car Dealership App
+              </a>
+            </div>
+            <ul class="sidebar-menu">
+              <li class="sidebar-item">
+                <a href="{% url 'employees' %}" class="sidebar-link">
+                  <img src="{% static 'img/team-5701.png' %}" class="sidebar-icon">
+                  <p>Employees</p>
+                </a>
+              </li>
+              <li class="sidebar-item">
+                <a href="{% url 'transactions' %}" class="sidebar-link">
+                  <img src="{% static 'img/file-1453.png' %}" class="sidebar-icon">
+                  <p>Transactions</p>
+                </a>
+              </li>
+              <li class="sidebar-item">
+                <a href="{% url 'cars' %}" class="sidebar-link">
+                  <img src="{% static 'img/car-2901.png' %}" class="sidebar-icon">
+                  <p>Cars</p>
+                </a>
+              </li>
+              <li class="sidebar-item">
+                <a href="{% url 'logout' %}" class="sidebar-link">
+                  <img src="{% static 'img/exit-logout-2856.png' %}" class="sidebar-icon">
+                  <p>Logout</p>
+                </a>
+              </li>
+            </ul>
+            <div>
+              <p class="sidebar-footer">
+                ©
+                <script>
+                  document.write(new Date().getFullYear())
+                </script>
+                <a href="https://github.com/xchan344" style="font-size: small;" alt="github" target="_blank">By: Christian Dela Gente</a>
+                <br>
+                <a href="https://github.com/NgtzBogz" style="font-size: small; margin-left: 40px;" alt="github" target="_blank"> and Elizalde Ulson</a>
+              </p>
+            </div>            
+          </div>
+        </div>
+      </div>
+      <div class="col-md-10 content-wrapper">
+        <!-- Main content of the page goes here -->
+        {% block content %}
+        {% endblock %}
+      </div>
+    </div>
+  </div>
+
+  <script src="{% static 'js/bootstrap.min.js' %}"></script>
+</body>
+</html>
