@@ -9,6 +9,9 @@ from .forms import CarModelForm
 from .forms import TransactionForm
 from .models import Transaction
 from django.shortcuts import render, redirect, get_object_or_404
+from django.core.paginator import Paginator
+from .models import Transaction, Car
+from .forms import TransactionForm, CarModelForm
 
 #employees page
 def employees(request):
@@ -87,8 +90,38 @@ def delete_car_model(request, pk):
 
 #transactions page
 def transactions(request):
+    fname = request.GET.get('fname')
+    lname = request.GET.get('lname')
+    car_id = request.GET.get('car')
+    t_type = request.GET.get('t_type')
+    t_status = request.GET.get('t_status')
+
     transactions = Transaction.objects.all()
-    return render(request, 'transactions.html', {'transactions': transactions})
+
+    if fname:
+        transactions = transactions.filter(fname__icontains=fname)
+    if lname:
+        transactions = transactions.filter(lname__icontains=lname)
+    if car_id:
+        transactions = transactions.filter(car_id=car_id)
+    if t_type:
+        transactions = transactions.filter(t_type=t_type)
+    if t_status:
+        transactions = transactions.filter(tr_status=t_status)
+
+    cars = Car.objects.all()
+
+    context = {
+        'transactions': transactions,
+        'cars': cars,
+        'fname': fname,
+        'lname': lname,
+        'selected_car': int(car_id) if car_id else None,
+        'selected_t_type': t_type,
+        'selected_t_status': t_status,
+    }
+
+    return render(request, 'transactions.html', context)
 
 def add_transaction(request):
     if request.method == 'POST':
@@ -98,13 +131,13 @@ def add_transaction(request):
             return redirect('transactions')
     else:
         form = TransactionForm()
-    
+
     cars = Car.objects.all()
-    
+
     return render(request, 'add_transaction.html', {'form': form, 'cars': cars})
 
 def edit_transaction(request, transaction_id):
-    transaction = get_object_or_404(Transaction, pk=transaction_id)
+    transaction = get_object_or_404(Transaction, id=transaction_id)
     if request.method == 'POST':
         form = TransactionForm(request.POST, instance=transaction)
         if form.is_valid():
@@ -112,9 +145,9 @@ def edit_transaction(request, transaction_id):
             return redirect('transactions')
     else:
         form = TransactionForm(instance=transaction)
-    
-    cars = Car.objects.all()  # Replace this with your cars queryset or list
-    
+
+    cars = Car.objects.all()
+
     context = {
         'form': form,
         'cars': cars,
@@ -122,8 +155,18 @@ def edit_transaction(request, transaction_id):
     return render(request, 'edit_transaction.html', context)
 
 def delete_transaction(request, transaction_id):
-    transaction = Transaction.objects.get(id=transaction_id)
+    transaction = get_object_or_404(Transaction, id=transaction_id)
     transaction.delete()
     return redirect('transactions')
 
+def transactions_view(request):
+    all_transactions = Transaction.objects.all()
+    paginator = Paginator(all_transactions, 15)
 
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    context = {
+        'transactions': page_obj,
+    }
+    return render(request, 'transactions.html', context)

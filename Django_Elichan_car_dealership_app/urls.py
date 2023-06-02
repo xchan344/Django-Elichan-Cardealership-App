@@ -11,9 +11,6 @@ urlpatterns = [
     path('add_employee/', views.add_employee, name='add_employee'),
     path('edit_employee/<int:employee_id>/', views.edit_employee, name='edit_employee'),
     path('delete_employee/<int:employee_id>/', views.delete_employee, name='delete_employee'),
-    path('transactions/', views.transactions, name='transactions'),
-    path('cars/', views.cars, name='cars'),
-    path('logout/', views.logout, name='logout'),
     #cars
     path('cars/', views.cars, name='cars'),
     path('add_car_model/', views.add_car_model, name='add_car_model'),
@@ -21,10 +18,11 @@ urlpatterns = [
     path('delete_car/<int:pk>/', views.delete_car_model, name='delete_car_model'),
     #transactions
     path('transactions/', views.transactions, name='transactions'),
-    path('add_transaction/', views.add_transaction, name='add_transaction'),
+    path('add_transaction/', views.transactions, name='add_transaction'),
     path('edit_transaction/<int:transaction_id>/', views.edit_transaction, name='edit_transaction'),
     path('delete_transaction/<int:transaction_id>/', views.delete_transaction, name='delete_transaction'),
 
+    path('logout/', views.logout, name='logout'),
 ]
 
 if settings.DEBUG:
