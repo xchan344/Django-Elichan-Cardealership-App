@@ -36,16 +36,16 @@
               <td><input type="text" id="id_lname" name="lname" value="{{ form.instance.lname }}" required></td>
             </tr>
             <tr>
-                <td>Car Model:</td>
-                <td>
-                  <select id="id_car" name="car_model" required>
-                    <option value="">--Car Model--</option>
-                    {% for car in cars %}
-                    <option value="{{ car.id }}" {% if car.id == form.instance.car_model.id %}selected{% endif %}>{{ car.car_model }}</option>
-                    {% endfor %}
-                  </select>
-                </td>
-              </tr>
+              <td>Car Model:</td>
+              <td>
+                <select id="id_car" name="car" required>
+                  <option value="">--Car Model--</option>
+                  {% for car in cars %}
+                  <option value="{{ car.id }}" {% if form.instance.car and car.pk == form.instance.car.pk %}selected{% endif %}>{{ car.car_model }}</option>
+                  {% endfor %}
+                </select>
+              </td>
+            </tr>
             <tr>
               <td>Transaction Type:</td>
               <td>
@@ -74,7 +74,7 @@
             </tr>
             <tr>
               <td>Date:</td>
-              <td><input type="date" id="id_date" name="date" value="{{ form.instance.date }}" required></td>
+              <td><input type="date" id="id_date" name="date" value="{{ form.instance.date|date:'Y-m-d' }}" required></td>
             </tr>
           </tbody>
         </table>
