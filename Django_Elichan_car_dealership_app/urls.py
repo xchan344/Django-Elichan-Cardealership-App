@@ -4,8 +4,12 @@ from employees.views import employees, add_employee, edit_employee, delete_emplo
 from django.conf import settings
 from django.conf.urls.static import static
 from employees import views
+app_name = 'employees'
 
 urlpatterns = [
+    #homepage
+    path('homepage/', views.homepage, name='homepage'),
+
     #employees
     path('employees/', views.employees, name='employees'),
     path('add_employee/', views.add_employee, name='add_employee'),

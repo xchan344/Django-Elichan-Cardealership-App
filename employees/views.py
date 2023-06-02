@@ -1,19 +1,40 @@
-from django.shortcuts import render, redirect
-from .forms import EmployeeForm
-from .models import Employee
-from django.shortcuts import render, get_object_or_404
-from django.http import HttpResponseRedirect
-from django.urls import reverse
-from .models import Car
-from .forms import CarModelForm
-from .forms import TransactionForm
-from .models import Transaction
 from django.shortcuts import render, redirect, get_object_or_404
 from django.core.paginator import Paginator
+from .forms import EmployeeForm, CarModelForm, TransactionForm
+from .models import Employee, Car, Transaction
 from .models import Transaction, Car
-from .forms import TransactionForm, CarModelForm
+from django.db.models import Count
+import json
 
-#employees page
+#homepage
+def homepage(request):
+    # Calculate transactions per car model
+    transactions_data = (
+        Transaction.objects
+        .values('car__car_model')
+        .annotate(transaction_count=Count('id'))
+        .order_by('car__car_model')
+    )
+
+    # Convert transactions_data to JSON
+    transactions_data_json = json.dumps(list(transactions_data))
+
+    context = {
+        'transactions_data': transactions_data_json
+    }
+    return render(request, 'homepage.html', context)
+
+#links
+def transactions(request):
+    return render(request, 'transactions.html')
+
+def cars(request):
+    return render(request, 'cars.html')
+
+def logout(request):
+    return render(request, 'logout.html')
+
+# Employees
 def employees(request):
     employees = Employee.objects.all()
     return render(request, 'employees/employees.html', {'employees': employees})
@@ -29,7 +50,7 @@ def add_employee(request):
     return render(request, 'employees/add_employee.html', {'form': form})
 
 def edit_employee(request, employee_id):
-    employee = Employee.objects.get(id=employee_id)
+    employee = get_object_or_404(Employee, id=employee_id)
     if request.method == 'POST':
         form = EmployeeForm(request.POST, instance=employee)
         if form.is_valid():
@@ -40,21 +61,11 @@ def edit_employee(request, employee_id):
     return render(request, 'edit_employee.html', {'form': form, 'employee_id': employee_id, 'employee': employee})
 
 def delete_employee(request, employee_id):
-    employee = Employee.objects.get(id=employee_id)
+    employee = get_object_or_404(Employee, id=employee_id)
     employee.delete()
     return redirect('employees')
 
-#links
-def transactions(request):
-    return render(request, 'transactions.html')
-
-def cars(request):
-    return render(request, 'cars.html')
-
-def logout(request):
-    return render(request, 'logout.html')
-
-#cars page
+# Cars
 def cars(request):
     cars = Car.objects.all()
     return render(request, 'cars.html', {'cars': cars})
@@ -67,12 +78,10 @@ def add_car_model(request):
             return redirect('cars')
     else:
         form = CarModelForm()
-    
     return render(request, 'add_car_model.html', {'form': form})
 
 def edit_car_model(request, pk):
     car = get_object_or_404(Car, pk=pk)
-    
     if request.method == 'POST':
         form = CarModelForm(request.POST, instance=car)
         if form.is_valid():
@@ -80,7 +89,6 @@ def edit_car_model(request, pk):
             return redirect('cars')
     else:
         form = CarModelForm(instance=car)
-    
     return render(request, 'edit_car_model.html', {'form': form})
 
 def delete_car_model(request, pk):
@@ -88,7 +96,7 @@ def delete_car_model(request, pk):
     car.delete()
     return redirect('cars')
 
-#transactions page
+# Transactions
 def transactions(request):
     fname = request.GET.get('fname')
     lname = request.GET.get('lname')
@@ -107,7 +115,7 @@ def transactions(request):
     if t_type:
         transactions = transactions.filter(t_type=t_type)
     if t_status:
-        transactions = transactions.filter(tr_status=t_status)
+        transactions = transactions.filter(t_status=t_status)
 
     cars = Car.objects.all()
 
@@ -158,15 +166,3 @@ def delete_transaction(request, transaction_id):
     transaction = get_object_or_404(Transaction, id=transaction_id)
     transaction.delete()
     return redirect('transactions')
-
-def transactions_view(request):
-    all_transactions = Transaction.objects.all()
-    paginator = Paginator(all_transactions, 15)
-
-    page_number = request.GET.get('page')
-    page_obj = paginator.get_page(page_number)
-
-    context = {
-        'transactions': page_obj,
-    }
-    return render(request, 'transactions.html', context)

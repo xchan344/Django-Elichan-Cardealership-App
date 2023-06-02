@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Elichan Car Dealership App</title>
+  <link rel="icon" href="img/logo.png" type="image/png">
+  {% extends 'employees/sidebar.html' %}
+  {% block content %}
+  {% load static %}
+  <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.min.css' %}">
+  <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+  <link rel="stylesheet" type="text/css" href="{% static 'css/tables-buttons.css' %}">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <!-- calculations still not fixed 
+    {% load custom_filters %}
+    <table>
+        <tr>
+          <th>Total Earnings</th>
+          <th>Total Sales Earnings</th>
+          <th>Total Repair Earnings</th>
+          <th>Total Consult Earnings</th>
+        </tr>
+        <tr>
+          <td>{{ transactions|total_earnings }}</td>
+          <td>{{ transactions|total_sales_earnings }}</td>
+          <td>{{ transactions|total_repair_earnings }}</td>
+          <td>{{ transactions|total_consult_earnings }}</td>
+        </tr>
+    </table> -->
+
+    <!-- chart -->
+    <h1 style="color: rgb(35, 18, 75)">Transactions per car model</h1>
+    <canvas id="transactionsChart"></canvas>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+          // Get the transaction data from the Django template
+          var transactionData = JSON.parse('{{ transactions_data|safe }}');
+      
+          // Prepare the data for the chart
+          var labels = [];
+          var data = [];
+          for (var i = 0; i < transactionData.length; i++) {
+            labels.push(transactionData[i].car__car_model);
+            data.push(transactionData[i].transaction_count);
+          }
+      
+          // Create the bar chart
+          var ctx = document.getElementById('transactionsChart').getContext('2d');
+          new Chart(ctx, {
+            type: 'bar',
+            data: {
+              labels: labels,
+              datasets: [{
+                label: 'Transactions per Car Model',
+                data: data,
+                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                borderColor: 'rgba(75, 192, 192, 1)',
+                borderWidth: 1
+              }]
+            },
+            options: {
+              scales: {
+                y: {
+                  beginAtZero: true,
+                  precision: 0
+                }
+              },
+              plugins: {
+                legend: {
+                  display: false
+                }
+              }
+            }
+          });
+        });
+      </script>
+{% endblock %}
+</body>
+</html>
