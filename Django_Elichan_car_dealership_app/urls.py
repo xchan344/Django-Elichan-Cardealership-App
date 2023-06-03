@@ -7,6 +7,10 @@ from employees import views
 app_name = 'employees'
 
 urlpatterns = [
+    #login
+    path('login/', views.login_view, name='login'),
+    path('register/', views.register_view, name='register'),
+
     #homepage
     path('homepage/', views.homepage, name='homepage'),
 
@@ -26,7 +30,6 @@ urlpatterns = [
     path('edit_transaction/<int:transaction_id>/', views.edit_transaction, name='edit_transaction'),
     path('delete_transaction/<int:transaction_id>/', views.delete_transaction, name='delete_transaction'),
 
-    path('logout/', views.logout, name='logout'),
 ]
 
 if settings.DEBUG:
