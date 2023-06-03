@@ -1,10 +1,66 @@
-{% extends 'base.html' %}
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Elichan Cardealership Login</title>
+  {% load static %}
+  <link href="{% static 'css/login.css' %}" rel="stylesheet" />
+  <link href="{% static 'css/login-animation.css' %}" rel="stylesheet" />
+  <style>
+    body.login-body {
+      background-image: url('{% static 'img/background.jpeg' %}');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      height: 100vh;
+      margin: 0;
+      padding: 0;
+    }
+  </style>
+</head>
 
-{% block content %}
-  <h2>Login</h2>
-  <form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Login</button>
-  </form>
-{% endblock %}
+<body class="login-body">
+    {% block content %}
+    <div class="sign-in">
+        <img src="{% static 'img/logo.png' %}" style="display: block; margin: auto; width: 300px; height: auto; box-shadow: 0px 3px 10px rgba(0, 0, 0, 0.2); padding-bottom: 30px" onclick="document.getElementById('id01').style.display='block'" style="width:auto;">
+        <p onclick="document.getElementById('id01').style.display='block'" style="width:auto; font-size: larger; color: rgb(35, 18, 75); margin-top: -33px; width: 250px; text-align:center; align-items: center; margin-left: 80px" class="sign-in-text">Click here to sign in</p>
+    </div>
+    <div id="id01" class="modal">
+        <form class="modal-content animate" action="{% url 'homepage' %}" method="post">
+            {% csrf_token %}
+            <div class="container">
+                <img src="{% static 'img/logo.png' %}" style="display: block; margin: auto; width: 50%; height: auto;">
+                <table>
+                    <tr>
+                        <td>
+                            <h2 class="h3 mb-3 font-weight-normal">Elichan Car Dealership App</h2>
+                        </td>
+                    <tr>
+                        <td>
+                            <p style="text-align: center">Sign in</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label for="id_username">Username:</label>
+                            {{ form.username }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label for="id_password">Password:</label>
+                            {{ form.password }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <button type="submit">Login</button>
+                            <a style="margin-left: 41.5%" href="{% url 'register' %}">Sign Up</a>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </form>
+    </div>
+    {% endblock %}
+</body>
+</html>
