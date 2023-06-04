@@ -200,6 +200,19 @@ That's it! Django should now be installed on your system. You can start creating
 
 <br> </br>
 
+- Running the server 
+
+1. On the project's root directory, run the terminal and paste the code below.
+```
+python manage.py runserver
+```
+2. Open the link given in your browser. or paste the link below in your browser.
+```
+http://127.0.0.1:8000/
+```
+
+<br> </br>
+
 # Usage
 
 The EliChan Car Dealership app can be used in a number of ways: 
