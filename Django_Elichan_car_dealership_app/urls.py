@@ -27,7 +27,7 @@ urlpatterns = [
     path('delete_car/<int:pk>/', views.delete_car_model, name='delete_car_model'),
     #transactions
     path('transactions/', views.transactions, name='transactions'),
-    path('add_transaction/', views.transactions, name='add_transaction'),
+    path('add_transaction/', views.add_transaction, name='add_transaction'),
     path('edit_transaction/<int:transaction_id>/', views.edit_transaction, name='edit_transaction'),
     path('delete_transaction/<int:transaction_id>/', views.delete_transaction, name='delete_transaction'),
 

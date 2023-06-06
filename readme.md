@@ -63,6 +63,11 @@
 
 <br> </br>
 
+![CarModelPage](img/Django-Elichan-Cardealership-App.gif)
+
+*The gif above shows the working project*
+
+<br> </br>
 
 # Installation
 
